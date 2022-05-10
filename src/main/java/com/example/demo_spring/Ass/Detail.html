@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+        .button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+        }
+
+        .button1 {
+            background-color: white;
+            color: black;
+            border: 2px solid #ff0d0d;
+        }
+        .button1:hover {
+            background-color: #f30202;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+<div class="w3-container">
+    <a href="News.html"><button class="button button1">X</button></a>
+    <div class="w3-row w3-margin">
+        <h2 style="text-align: center">Detail News</h2>
+    </div>
+    <div class="w3-row w3-margin">
+        <table id="news-table">
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>Content</th>
+                <th>Category</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>Status</th>
+            </tr>
+        </table>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const urlParmas = new URLSearchParams(window.location.search);
+        const id = urlParmas.get('id');
+        var getArticleDetailUrl = `http://localhost:8080/api/v1/news/${id}`;
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    var element = JSON.parse(xhr.responseText);
+                    var tableTag = document.querySelector('#news-table');
+                    tableTag.innerHTML += `<tr>
+                                                    <td>${element.id}</td>
+                                                    <td>${element.title}</td>
+                                                    <td>${element.description}</td>
+                                                    <td><img style="height: 100px" src="${element.image}"></td>
+                                                    <td>${element.content}</td>
+                                                    <td>${element.category}</td>
+                                                    <td>${element.createAt}</td>
+                                                    <td>${element.updateAt}</td>
+                                                    <td>${element.status}</td>
+                                    </tr>`;
+                } else {
+                    alert("Can't load news");
+                }
+            }
+        }
+        xhr.open('GET', getArticleDetailUrl, false);
+        xhr.send();
+    });
+</script>
+</body>
+</html>
